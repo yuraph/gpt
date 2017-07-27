@@ -4,10 +4,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.gpengtao.sql.model.ColumnDesc;
 import com.gpengtao.sql.util.TableInfoUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+import javax.swing.text.rtf.RTFEditorKit;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -71,6 +73,9 @@ public class InsertMockRowMain {
     private static Object makeValue(ColumnDesc column) {
         String type = column.getType();
         String field = column.getField();
+        if (type.startsWith("int") || type.startsWith("bigint") || type.startsWith("decimal")) {
+            return makeAbsNumber(field);
+        }
         if (type.startsWith("int") || type.startsWith("decimal") || type.startsWith("bigint")) {
             return makeAbsNumber(field);
         }
@@ -80,11 +85,12 @@ public class InsertMockRowMain {
         if (type.contains("tinyint")) {
             return makeAbsNumber(field, 5);
         }
-        if (type.contains("timestamp")) {
+        if (type.contains("timestamp")||type.contains("date")) {
             return makeDateString(field);
         }
         if (type.contains("varchar")) {
-            return makeString(field);
+            int maxLength = Integer.valueOf(type.replaceAll("\\D+", ""));
+            return makeString(field, maxLength);
         }
 
         throw new RuntimeException("不支持" + type);
@@ -95,7 +101,14 @@ public class InsertMockRowMain {
     }
 
     private static String makeString(String field) {
-        return "'" + field + "_" + makeAbsNumber(field) + "'";
+        return field + "_" + makeAbsNumber(field);
+    }
+
+    private static String makeString(String field, Integer maxLength) {
+        String temp = makeString(field);
+        int start = temp.length() > maxLength ? temp.length() - maxLength : 0;
+        String value = "'" + temp.substring(start, temp.length() - 1) + "'";
+        return value;
     }
 
     private static Object makeDateString(String field) {
@@ -105,7 +118,13 @@ public class InsertMockRowMain {
 
     private static int makeAbsNumber(String column) {
         int anInt = new Random(System.currentTimeMillis() + column.hashCode()).nextInt();
-        return Math.abs(anInt) % 1000000;
+        return Math.abs(anInt) % 1000;
+    }
+
+    private static int makeAbsDecimal(String field, String type) {
+        String first = type.split(",")[1];
+        String second = type.split(",")[2];
+        return 0;
     }
 
     private static int makeAbsNumber(String field, int bound) {
