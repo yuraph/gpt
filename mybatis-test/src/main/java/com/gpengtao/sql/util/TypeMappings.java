@@ -34,6 +34,9 @@ public class TypeMappings {
         if (sqlType.startsWith("text")){
             return "String";
         }
+        if (sqlType.startsWith("tinyint")){
+            return "int";
+        }
 
         throw new RuntimeException("不支持映射sqlType: " + sqlType);
     }
