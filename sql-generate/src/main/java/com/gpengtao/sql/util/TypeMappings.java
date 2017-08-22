@@ -27,10 +27,13 @@ public class TypeMappings {
         if (sqlType.startsWith("smallint")) {
             return "int";
         }
-        if (sqlType.startsWith("text")){
+        if (sqlType.startsWith("text")) {
             return "String";
         }
-        if (sqlType.startsWith("tinyint")){
+        if (sqlType.startsWith("tinyint(1)")) {
+            return "boolean";
+        }
+        if (sqlType.startsWith("tinyint")) {
             return "int";
         }
 
