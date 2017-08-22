@@ -1,9 +1,5 @@
 package com.gpengtao.sql.util;
 
-import com.google.common.collect.Lists;
-
-import java.util.List;
-
 /**
  * Created by pengtao.geng on 2017/3/15.
  */

@@ -3,46 +3,36 @@ package com.gpengtao.sql;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.gpengtao.sql.model.ColumnDesc;
+import com.gpengtao.sql.util.OutFileUtil;
 import com.gpengtao.sql.util.TableInfoUtil;
 import com.gpengtao.sql.util.TypeMappings;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by gpengtao on 15/10/18.
  */
 public class GenerateSqlMain {
 
-    /**
-     * 复制resource目录里面的db.properties到target目录，修改配置
-     *
-     * @param args
-     * @throws SQLException
-     * @throws IOException
-     */
     public static void main(String[] args) throws SQLException, IOException {
-        Properties properties = new Properties();
-        properties.load(new FileInputStream("mybatis-test/target/db.properties"));
 
-        System.out.println("数据配置信息：" + properties);
-
-        String url = properties.getProperty("jdbc_url");
-        String username = properties.getProperty("jdbc_username");
-        String password = properties.getProperty("jdbc_password");
-        String tableName = properties.getProperty("jdbc_table_name");
+        String url = "jdbc:mysql://10.0.64.11:3306/data_product_warehouse?useUnicode=true&amp;characterEncoding=UTF-8";
+        String username = "beta";
+        String password = "kVkBhpSVa6!3";
+        String tableName = "md_meeting";
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
-
         List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, tableName);
 
         printInsertSql(columnDescList, tableName);
 
         printSelectSql(columnDescList);
+
+        OutFileUtil.init();
 
         printModelFields(columnDescList);
     }
@@ -51,7 +41,19 @@ public class GenerateSqlMain {
         for (ColumnDesc columnDesc : columnDescList) {
             String javaType = TypeMappings.findJaveType(columnDesc.getType());
             String propertyName = getJavaPropertyName(columnDesc.getField());
-            System.out.println("private " + javaType + " " + propertyName + ";");
+
+            String comment = "/**\n" +
+                    " * " + columnDesc.getComment() + "\n" +
+                    " */\n";
+
+            String field = "private " + javaType + " " + propertyName + ";\n\n";
+
+            System.out.print(comment);
+            System.out.print(field);
+
+            OutFileUtil.writeField(comment);
+            OutFileUtil.writeField(field);
+
         }
     }
 

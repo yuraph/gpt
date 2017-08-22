@@ -16,11 +16,11 @@
     <name>security-test</name>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframwork.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>4.2.3.RELEASE</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframwork.security</groupId>-->
+            <!--<artifactId>spring-security-web</artifactId>-->
+            <!--<version>4.2.3.RELEASE</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>junit</groupId>
