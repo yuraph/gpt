@@ -6,6 +6,7 @@ import com.gpengtao.sql.model.ColumnDesc;
 import com.gpengtao.sql.util.OutFileUtil;
 import com.gpengtao.sql.util.TableInfoUtil;
 import com.gpengtao.sql.util.TypeMappings;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class GenerateSqlMain {
         String url = "jdbc:mysql://10.0.64.11:3306/data_product_warehouse?useUnicode=true&amp;characterEncoding=UTF-8";
         String username = "beta";
         String password = "kVkBhpSVa6!3";
-        String tableName = "md_meeting";
+        String tableName = "md_meeting_product";
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
         List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, tableName);
@@ -33,7 +34,32 @@ public class GenerateSqlMain {
 
         printSelectSql(columnDescList);
 
+        printUpdateSql(columnDescList);
+
         printModelFields(columnDescList);
+    }
+
+    private static void printUpdateSql(List<ColumnDesc> columnDescList) {
+        String template = "<if test=\"%s != null\">\n"
+                + "\t%s = #{%s},\n"
+                + "</if>";
+
+        String templateVarchar = "<if test=\"%s != null and %s != ''\">\n"
+                + "\t%s = #{%s},\n"
+                + "</if>";
+
+        for (ColumnDesc columnDesc : columnDescList) {
+            String propertyName = getJavaPropertyName(columnDesc.getField());
+
+            String sql;
+            if (StringUtils.containsIgnoreCase(columnDesc.getType(), "char") || StringUtils.containsIgnoreCase(columnDesc.getType(), "text")) {
+                sql = String.format(templateVarchar, propertyName, propertyName, columnDesc.getField(), propertyName);
+            } else {
+                sql = String.format(template, propertyName, columnDesc.getField(), propertyName);
+            }
+
+            OutFileUtil.writeSql(sql + "\n");
+        }
     }
 
     private static void printModelFields(List<ColumnDesc> columnDescList) {
@@ -47,12 +73,8 @@ public class GenerateSqlMain {
 
             String field = "private " + javaType + " " + propertyName + ";\n\n";
 
-            System.out.print(comment);
-            System.out.print(field);
-
             OutFileUtil.writeField(comment);
             OutFileUtil.writeField(field);
-
         }
     }
 
@@ -72,7 +94,7 @@ public class GenerateSqlMain {
                 + sql
                 + "</sql>";
 
-        OutFileUtil.writeSql(finalSql + "\n");
+        OutFileUtil.writeSql(finalSql + "\n\n");
     }
 
     private static void printInsertSql(List<ColumnDesc> columnDescList, String tbaleName) {
