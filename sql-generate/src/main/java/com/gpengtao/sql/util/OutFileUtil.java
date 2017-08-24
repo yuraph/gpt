@@ -11,11 +11,18 @@ import java.nio.charset.Charset;
  * Created by pengtao.geng on 2017/8/22.
  */
 public class OutFileUtil {
+
+    private static String sqlFile = "sql-generate/target/sql.txt";
+
     private static String fieldFile = "sql-generate/target/field.txt";
 
     public static void init() {
+        initFile(sqlFile);
+        initFile(fieldFile);
+    }
 
-        File file = new File(fieldFile);
+    private static void initFile(String fileName) {
+        File file = new File(fileName);
         if (file.exists()) {
             file.delete();
         }
@@ -26,6 +33,10 @@ public class OutFileUtil {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public static void writeSql(String line) {
+        doWrite(sqlFile, line);
     }
 
     public static void writeField(String line) {

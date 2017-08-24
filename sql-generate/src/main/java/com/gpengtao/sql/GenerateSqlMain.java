@@ -8,7 +8,6 @@ import com.gpengtao.sql.util.TableInfoUtil;
 import com.gpengtao.sql.util.TypeMappings;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,11 +27,11 @@ public class GenerateSqlMain {
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
         List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, tableName);
 
+        OutFileUtil.init();
+
         printInsertSql(columnDescList, tableName);
 
         printSelectSql(columnDescList);
-
-        OutFileUtil.init();
 
         printModelFields(columnDescList);
     }
@@ -61,14 +60,19 @@ public class GenerateSqlMain {
         List<String> show = Lists.newArrayList();
         for (ColumnDesc column : columnDescList) {
             if (column.getField().contains("_")) {
-                show.add(column.getField() + " as " + getJavaPropertyName(column.getField()));
+                show.add("\t" + column.getField() + " as " + getJavaPropertyName(column.getField()));
             } else {
-                show.add(column.getField());
+                show.add("\t" + column.getField());
             }
         }
 
-        System.out.println(Joiner.on(",\r\n").join(show));
-        System.out.println();
+        String sql = Joiner.on(",\n").join(show) + "\n";
+
+        String finalSql = "<sql id=\"selectSql\">\n"
+                + sql
+                + "</sql>";
+
+        OutFileUtil.writeSql(finalSql + "\n");
     }
 
     private static void printInsertSql(List<ColumnDesc> columnDescList, String tbaleName) {
@@ -90,21 +94,40 @@ public class GenerateSqlMain {
         propertyNameList = addTab(propertyNameList);
         propertyNameListItem = addTab(propertyNameListItem);
 
-        String insertOne = "INSERT INTO %s(\r\n%s\r\n) values(\r\n%s\r\n)";
-        String insertList = "INSERT INTO %s(\r\n%s\r\n) values \r\n<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\">\n(\r\n%s\r\n)\n</foreach>\n";
+        String insertOneTem = "\tINSERT INTO %s(\n" +
+                "%s\n" +
+                "\t) values(\n" +
+                "%s\n" +
+                "\t)\n";
+        String insertListTem = "\tINSERT INTO %s(\n" +
+                "%s\n" +
+                "\t) values \n" +
+                "\t<foreach collection=\"list\" item=\"item\" index=\"index\" separator=\",\">\n" +
+                "\t(\n" +
+                "%s\n" +
+                "\t)\n" +
+                "\t</foreach>\n";
 
-        String show1 = String.format(insertOne,
+        String sql1 = String.format(insertOneTem,
                 tbaleName,
-                Joiner.on(",\r\n").join(nameList),
-                Joiner.on(",\r\n").join(propertyNameList));
+                Joiner.on(",\n").join(nameList),
+                Joiner.on(",\n").join(propertyNameList));
 
-        String show2 = String.format(insertList,
+        String sql2 = String.format(insertListTem,
                 tbaleName,
-                Joiner.on(",\r\n").join(nameList),
-                Joiner.on(",\r\n").join(propertyNameListItem));
+                Joiner.on(",\n").join(nameList),
+                Joiner.on(",\n").join(propertyNameListItem));
 
-        System.out.println(show1);
-        System.out.println(show2);
+        String finalSql1 = "<insert id=\"insertOne\" parameterType=\"xxx\" useGeneratedKeys=\"true\" keyProperty=\"id\">\n"
+                + sql1
+                + "</insert>";
+
+        String finalSql2 = "<insert id=\"insertList\" parameterType=\"java.util.List\">\n"
+                + sql2
+                + "</insert>";
+
+        OutFileUtil.writeSql(finalSql1 + "\n\n");
+        OutFileUtil.writeSql(finalSql2 + "\n\n");
     }
 
     private static List<String> addBracketItem(List<String> nameList) {
@@ -126,7 +149,7 @@ public class GenerateSqlMain {
     private static List<String> addTab(List<String> nameList) {
         List<String> result = Lists.newArrayList();
         for (String name : nameList) {
-            result.add("\t" + name);
+            result.add("\t\t" + name);
         }
         return result;
     }
