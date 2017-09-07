@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script>
+    var address = "";
+    var index1 = address.lastIndexOf("/");
+    var index2 = address.lastIndexOf(".");
+
+    var num = parseInt(address.substring(index1 + 1, index2));
+    var left = address.substring(0, index1 + 1);
+    var right = address.substring(index2);
+
+    while (num > 0) {
+        var str = num;
+        if (num < 10) {
+            str = "0" + num;
+        }
+        document.write("<img src=\"" + left + str + right + "\">" + "<br>")
+
+        num = num - 1;
+    }
+</script>
+
+</body>
+</html>
