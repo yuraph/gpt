@@ -20,10 +20,10 @@ public class GenerateSqlMain {
 
     public static void main(String[] args) throws SQLException, IOException {
 
-        String url = "jdbc:mysql://10.0.64.11:3306/xxx?useUnicode=true&amp;characterEncoding=UTF-8";
-        String username = "xx";
-        String password = "xxx";
-        String tableName = "xxx";
+        String url = "jdbc:mysql://10.0.64.11:3306/data_shelf_integration?useUnicode=true&amp;characterEncoding=UTF-8";
+        String username = "beta";
+        String password = "kVkBhpSVa6!3";
+        String tableName = "shelf_image";
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
         List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, tableName);
@@ -116,9 +116,9 @@ public class GenerateSqlMain {
         propertyNameList = addTab(propertyNameList);
         propertyNameListItem = addTab(propertyNameListItem);
 
-        String insertOneTem = "\tINSERT INTO %s(\n" +
+        String insertOneTem = "\tINSERT INTO %s (\n" +
                 "%s\n" +
-                "\t) values(\n" +
+                "\t) values (\n" +
                 "%s\n" +
                 "\t)\n";
         String insertListTem = "\tINSERT INTO %s(\n" +

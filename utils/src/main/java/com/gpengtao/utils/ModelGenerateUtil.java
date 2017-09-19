@@ -1,6 +1,7 @@
 package com.gpengtao.utils;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -14,65 +15,81 @@ import java.util.*;
 public class ModelGenerateUtil {
 
     public static <T> T generateModel(Class<T> clazz) throws Exception {
-        T vo = clazz.newInstance();
+        T model = clazz.newInstance();
 
         Field[] declaredFields = getInheritedFields(clazz).toArray(new Field[]{});
         for (Field field : declaredFields) {
-            String name = field.getName();
+            String fieldName = field.getName();
             Class<?> type = field.getType();
 
-            if ("serialVersionUID".equals(name)) {
+            if ("serialVersionUID".equals(fieldName)) {
                 continue;
             }
 
-            String firstLetter = name.substring(0, 1).toUpperCase();
-            String setter = "set" + firstLetter + name.substring(1);
+            String setter = calcSetMethodName(fieldName);
+
             if (type.isAssignableFrom(String.class)) {
+                // String
                 Method setterMethod = clazz.getMethod(setter, String.class);
 
                 if (isSetStartEndDate(setter)) {
-                    setterMethod.invoke(vo, getDateString());
+                    setterMethod.invoke(model, getDateString());
                 } else {
-                    setterMethod.invoke(vo, name + randomInt());
+                    setterMethod.invoke(model, fieldName + randomInt());
                 }
+
             } else if (type.isAssignableFrom(int.class)) {
+                // int
                 Method setterMethod = clazz.getMethod(setter, int.class);
-                setterMethod.invoke(vo, randomInt());
+                setterMethod.invoke(model, randomInt());
             } else if (type.isAssignableFrom(Integer.class)) {
+                // Integer
                 Method setterMethod = clazz.getMethod(setter, Integer.class);
-                setterMethod.invoke(vo, randomInt());
+                setterMethod.invoke(model, randomInt());
             } else if (type.isAssignableFrom(long.class)) {
+                // long
                 Method setterMethod = clazz.getMethod(setter, long.class);
-                setterMethod.invoke(vo, randomInt());
+                setterMethod.invoke(model, randomInt());
             } else if (type.isAssignableFrom(double.class)) {
+                // double
                 Method setterMethod = clazz.getMethod(setter, double.class);
-                setterMethod.invoke(vo, new Random().nextDouble());
+                setterMethod.invoke(model, new Random().nextDouble());
             } else if (type.isAssignableFrom(boolean.class)) {
+                // boolean
                 Method setterMethod = clazz.getMethod(setter, boolean.class);
-                setterMethod.invoke(vo, randomBoolean());
+                setterMethod.invoke(model, randomBoolean());
             } else if (type.isAssignableFrom(BigDecimal.class)) {
+                // BigDecimal
                 Method setterMethod = clazz.getMethod(setter, BigDecimal.class);
-                setterMethod.invoke(vo, randomBigDecimal());
+                setterMethod.invoke(model, randomBigDecimal());
             } else if (type.isAssignableFrom(Date.class)) {
+                // Date
                 Method setterMethod = clazz.getMethod(setter, Date.class);
-                setterMethod.invoke(vo, new Date());
+                setterMethod.invoke(model, new Date());
             } else if (field.getType().isAssignableFrom(List.class)) {
+                // List<>
                 String fullTypeName = field.getGenericType().getTypeName();
                 String listType = fullTypeName.substring(fullTypeName.indexOf("<") + 1, fullTypeName.lastIndexOf(">"));
                 Class<?> listClass = Class.forName(listType);
                 Object o1 = generateModel(listClass);
                 Object o2 = generateModel(listClass);
                 Method setterMethod = clazz.getMethod(setter, List.class);
-                setterMethod.invoke(vo, Lists.newArrayList(o1, o2));
+                setterMethod.invoke(model, Lists.newArrayList(o1, o2));
             } else {
+                System.out.println("没有找到对应的类型：" + fieldName);
+
                 Object o = generateModel(type);
                 Method setterMethod = clazz.getMethod(setter, type);
-                setterMethod.invoke(vo, o);
-                System.out.println("========" + name);
+                setterMethod.invoke(model, o);
             }
         }
 
-        return vo;
+        return model;
+    }
+
+    private static String calcSetMethodName(String fieldName) {
+        String firstLetter = fieldName.substring(0, 1).toUpperCase();
+        return "set" + firstLetter + fieldName.substring(1);
     }
 
     private static String getDateString() {
@@ -81,7 +98,7 @@ public class ModelGenerateUtil {
     }
 
     private static boolean isSetStartEndDate(String setter) {
-        return setter.equals("setStartDate") || setter.equals("setEndDate");
+        return StringUtils.containsIgnoreCase(setter, "StartDate") || StringUtils.containsIgnoreCase(setter, "EndDate");
     }
 
     private static List<Field> getInheritedFields(Class<?> type) {
