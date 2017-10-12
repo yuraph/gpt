@@ -23,7 +23,7 @@ public class GenerateSqlMain {
         String url = "jdbc:mysql://10.0.64.11:3306/data_shelf_integration?useUnicode=true&amp;characterEncoding=UTF-8";
         String username = "beta";
         String password = "kVkBhpSVa6!3";
-        String tableName = "shelf_image";
+        String tableName = "recognition_result";
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
         List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, tableName);
