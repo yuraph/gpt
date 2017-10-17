@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SayHiService implements ISayHiable {
 
-    private static final Logger logger = LoggerFactory.getLogger(SayHiService.class);
-
     @Override
     public void sayHi() {
-        logger.info("say hi service say hi !");
+        System.out.println("say hi service say hi !");
     }
 }
