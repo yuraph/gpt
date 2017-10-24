@@ -20,10 +20,10 @@ public class GenerateSqlMain {
 
     public static void main(String[] args) throws SQLException, IOException {
 
-        String url = "jdbc:mysql://10.255.206.132:33006/data_faceless_man?useUnicode=true&amp;characterEncoding=UTF-8";
+        String url = "jdbc:mysql://10.255.206.50:3309/data_faceless_man?useUnicode=true&amp;characterEncoding=UTF-8";
         String username = "beta";
         String password = "kVkBhpSVa6!3";
-        String tableName = "scan_record";
+        String tableName = "entrance_record";
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
         List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, tableName);

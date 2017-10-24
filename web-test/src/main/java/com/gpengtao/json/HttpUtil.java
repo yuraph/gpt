@@ -20,8 +20,6 @@ import java.util.Locale;
  */
 public class HttpUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
-
     public static void test() {
         CloseableHttpClient client = HttpClients.createDefault();
 
@@ -38,17 +36,21 @@ public class HttpUtil {
             HttpEntity entity = response.getEntity();
 
             String string = EntityUtils.toString(entity);
-            logger.info("返回的结果:{}", string);
-
-            logger.info("contents length:{}", entity.getContentLength());
 
         } catch (IOException e) {
-            logger.error("", e);
         }
     }
 
-    public static void main(String[] args) {
-        test();
+    public static void main(String[] args) throws IOException {
+        CloseableHttpClient client = HttpClients.createDefault();
+
+        HttpGet httpGet = new HttpGet("http://h5.itcast.cn/pp/zhufuAjax");
+
+        CloseableHttpResponse response = client.execute(httpGet);
+
+        System.out.println(response.getStatusLine());
+
+
     }
 
 }
