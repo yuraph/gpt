@@ -12,16 +12,17 @@ import java.nio.charset.Charset;
  */
 public class OutFileUtil {
 
-    private static String sqlFile = "sql-generate/target/sql.txt";
+    private static String sqlFile = "sql-generate/target/%s_sql.txt";
 
-    private static String fieldFile = "sql-generate/target/field.txt";
+    private static String fieldFile = "sql-generate/target/%s_field.txt";
 
-    public static void init() {
-        initFile(sqlFile);
-        initFile(fieldFile);
+    private static String file = "sql-generate/target/%s.txt";
+
+    public static void initFile(String table) {
+        doInitFile(String.format(file, table));
     }
 
-    private static void initFile(String fileName) {
+    private static void doInitFile(String fileName) {
         File file = new File(fileName);
         if (file.exists()) {
             file.delete();
@@ -35,12 +36,14 @@ public class OutFileUtil {
         }
     }
 
-    public static void writeSql(String line) {
-        doWrite(sqlFile, line);
+    public static void writeSql(String table, String line) {
+        String fileName = String.format(file, table);
+        doWrite(fileName, line);
     }
 
-    public static void writeField(String line) {
-        doWrite(fieldFile, line);
+    public static void writeField(String table, String line) {
+        String fileName = String.format(file, table);
+        doWrite(fileName, line);
     }
 
     public static void doWrite(String file, String line) {

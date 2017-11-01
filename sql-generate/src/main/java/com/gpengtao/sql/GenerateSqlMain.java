@@ -1,17 +1,23 @@
 package com.gpengtao.sql;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.gpengtao.sql.model.ColumnDesc;
 import com.gpengtao.sql.util.OutFileUtil;
 import com.gpengtao.sql.util.TableInfoUtil;
 import com.gpengtao.sql.util.TypeMappings;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by gpengtao on 15/10/18.
@@ -20,26 +26,53 @@ public class GenerateSqlMain {
 
     public static void main(String[] args) throws SQLException, IOException {
 
-        String url = "jdbc:mysql://10.255.206.50:3309/data_faceless_man?useUnicode=true&amp;characterEncoding=UTF-8";
+        String url = "jdbc:mysql://10.0.64.22:3309/data_faceless_men?useUnicode=true&amp;characterEncoding=UTF-8";
         String username = "beta";
         String password = "kVkBhpSVa6!3";
-        String tableName = "entrance_record";
+        String tableName = "";
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
-        List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, tableName);
 
-        OutFileUtil.init();
+        List<String> tables = findTables(dataSource, tableName);
+        tables.forEach(table -> {
+            OutFileUtil.initFile(table);
 
-        printInsertSql(columnDescList, tableName);
+            List<ColumnDesc> columnDescList = TableInfoUtil.findTableColumnInfo(dataSource, table);
 
-        printSelectSql(columnDescList);
+            printInsertSql(table, columnDescList, table);
 
-        printUpdateSql(columnDescList);
+            printSelectSql(table, columnDescList);
 
-        printModelFields(columnDescList);
+            printUpdateSql(table, columnDescList);
+
+            printModelFields(table, columnDescList);
+        });
+
     }
 
-    private static void printUpdateSql(List<ColumnDesc> columnDescList) {
+    private static List<String> findTables(SingleConnectionDataSource dataSource, String tableName) {
+        if (Strings.isNullOrEmpty(tableName) || "*".equals(tableName)) {
+            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+            List<Map<String, Object>> listMap = jdbcTemplate.queryForList("show tables");
+
+            List<String> result = Lists.newArrayList();
+            listMap.forEach(one -> {
+                List<String> list = one.values().stream().map(new Function<Object, String>() {
+                    @Nullable
+                    @Override
+                    public String apply(@Nullable Object input) {
+                        return input == null ? "" : input.toString();
+                    }
+                }).collect(Collectors.toList());
+                result.addAll(list);
+            });
+            return result;
+        } else {
+            return Lists.newArrayList(tableName);
+        }
+    }
+
+    private static void printUpdateSql(String table, List<ColumnDesc> columnDescList) {
         String template = "<if test=\"%s != null\">\n"
                 + "\t%s = #{%s},\n"
                 + "</if>";
@@ -58,11 +91,13 @@ public class GenerateSqlMain {
                 sql = String.format(template, propertyName, columnDesc.getField(), propertyName);
             }
 
-            OutFileUtil.writeSql(sql + "\n");
+            OutFileUtil.writeSql(table, sql + "\n");
         }
+
+        OutFileUtil.writeSql(table, "\n\n");
     }
 
-    private static void printModelFields(List<ColumnDesc> columnDescList) {
+    private static void printModelFields(String table, List<ColumnDesc> columnDescList) {
         for (ColumnDesc columnDesc : columnDescList) {
             String javaType = TypeMappings.findJaveType(columnDesc.getType());
             String propertyName = getJavaPropertyName(columnDesc.getField());
@@ -73,12 +108,12 @@ public class GenerateSqlMain {
 
             String field = "private " + javaType + " " + propertyName + ";\n\n";
 
-            OutFileUtil.writeField(comment);
-            OutFileUtil.writeField(field);
+            OutFileUtil.writeField(table, comment);
+            OutFileUtil.writeField(table, field);
         }
     }
 
-    private static void printSelectSql(List<ColumnDesc> columnDescList) {
+    private static void printSelectSql(String table, List<ColumnDesc> columnDescList) {
         List<String> show = Lists.newArrayList();
         for (ColumnDesc column : columnDescList) {
             if (column.getField().contains("_")) {
@@ -94,10 +129,10 @@ public class GenerateSqlMain {
                 + sql
                 + "</sql>";
 
-        OutFileUtil.writeSql(finalSql + "\n\n");
+        OutFileUtil.writeSql(table, finalSql + "\n\n");
     }
 
-    private static void printInsertSql(List<ColumnDesc> columnDescList, String tbaleName) {
+    private static void printInsertSql(String table, List<ColumnDesc> columnDescList, String tbaleName) {
         List<String> nameList = Lists.newArrayList();
         List<String> propertyNameList = Lists.newArrayList();
         for (ColumnDesc desc : columnDescList) {
@@ -148,8 +183,8 @@ public class GenerateSqlMain {
                 + sql2
                 + "</insert>";
 
-        OutFileUtil.writeSql(finalSql1 + "\n\n");
-        OutFileUtil.writeSql(finalSql2 + "\n\n");
+        OutFileUtil.writeSql(table, finalSql1 + "\n\n");
+        OutFileUtil.writeSql(table, finalSql2 + "\n\n");
     }
 
     private static List<String> addBracketItem(List<String> nameList) {
