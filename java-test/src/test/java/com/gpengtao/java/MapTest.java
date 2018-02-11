@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.function.BinaryOperator;
 import java.util.stream.Collectors;
 
 /**
@@ -32,5 +34,29 @@ public class MapTest {
 
         List<Map.Entry<String, Integer>> collect = map.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toList());
         System.out.println(collect);
+
+        // treeMap排序
+        Map<String, Integer> treeMap = new TreeMap<>(map);
+        System.out.println(treeMap);
+    }
+
+    @Test
+    public void test_map_key_value_reverse() {
+        Map<String, String> map = Maps.newHashMap();
+        map.put("1", "1");
+        map.put("2", "1");
+        map.put("3", "2");
+        map.put("4", "2");
+        map.put("5", "2");
+
+        Map<String, String> reverseMap = map.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey, new BinaryOperator<String>() {
+            @Override
+            public String apply(String s1, String s2) {
+                return s2;
+            }
+        }));
+
+        System.out.println(reverseMap);
+
     }
 }

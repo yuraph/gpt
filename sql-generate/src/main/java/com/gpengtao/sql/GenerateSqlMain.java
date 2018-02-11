@@ -26,10 +26,10 @@ public class GenerateSqlMain {
 
     public static void main(String[] args) throws SQLException, IOException {
 
-        String url = "jdbc:mysql://10.255.206.132:33007/data_production_plan?useUnicode=true&amp;characterEncoding=UTF-8";
+        String url = "jdbc:mysql://10.255.206.132:33008/data_production_plan?useUnicode=true&amp;characterEncoding=UTF-8";
         String username = "dev";
         String password = "096667f9c7d0396d";
-        String tableName = "sku_expire";
+        String tableName = "plan_detail";
 
         SingleConnectionDataSource dataSource = new SingleConnectionDataSource(url, username, password, false);
 

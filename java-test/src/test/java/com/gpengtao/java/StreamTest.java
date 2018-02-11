@@ -4,7 +4,9 @@ package com.gpengtao.java;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
@@ -67,5 +69,20 @@ public class StreamTest {
 
         System.out.println("map count " + mapCount);
         System.out.println("reduce count " + reduceCount);
+    }
+
+    @Test
+    public void test_grouping_min_by() {
+        List<Integer> list = Lists.newArrayList(1, 2, 3, 4, 5, 6, 1, 1);
+
+        Map<String, Optional<Integer>> groups = list.stream().collect(Collectors.groupingBy(one -> {
+            if (one > 3) {
+                return "big";
+            } else {
+                return "small";
+            }
+        }, Collectors.minBy(Comparator.naturalOrder())));
+
+        System.out.println(groups);
     }
 }
