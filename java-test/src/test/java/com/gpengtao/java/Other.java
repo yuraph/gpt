@@ -2,6 +2,7 @@ package com.gpengtao.java;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,5 +36,14 @@ public class Other {
         list.remove(person);
 
         System.out.println(list);
+    }
+
+    @Test
+    public void test_integer() {
+
+    }
+
+    public static void main(String[] args) throws IOException {
+        System.in.read();
     }
 }
