@@ -46,7 +46,7 @@ public class ModelGenerateUtil {
                 // Integer
                 Method setterMethod = clazz.getMethod(setter, Integer.class);
                 setterMethod.invoke(model, randomInt());
-            } else if (type.isAssignableFrom(long.class)) {
+            } else if (type.isAssignableFrom(Long.class)) {
                 // long
                 Method setterMethod = clazz.getMethod(setter, long.class);
                 setterMethod.invoke(model, randomInt());

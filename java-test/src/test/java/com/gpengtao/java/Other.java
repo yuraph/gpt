@@ -1,8 +1,10 @@
 package com.gpengtao.java;
 
+import com.google.common.collect.Lists;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,5 +47,30 @@ public class Other {
 
     public static void main(String[] args) throws IOException {
         System.in.read();
+    }
+
+    @Test
+    public void test_double() {
+        double a = 0.3;
+        System.out.println(a);
+
+        BigDecimal b = new BigDecimal(0.6);
+        System.out.println(b);
+    }
+
+    @Test
+    public void test_uniq() {
+        List<Integer> list = Lists.newArrayList(1, 2, 1, 2, 3, 4, 1, 2);
+
+        System.out.println(list);
+    }
+
+    @Test
+    public void test_sort() {
+        List<Integer> list = Lists.newArrayList(3, 2, 1, 5, 4);
+
+        list.sort(Integer::compareTo);
+
+        System.out.println(list);
     }
 }
