@@ -85,4 +85,31 @@ public class StreamTest {
 
         System.out.println(groups);
     }
+
+    @Test
+    public void test_xing_neng() {
+        List<Integer> list = Lists.newArrayList(1, 2);
+
+        int times = 100000000;
+
+        for (int count = 0; count < 100; count++) {
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < times; i++) {
+                list.forEach(x -> {
+                    int a = x * x;
+                });
+            }
+            System.out.println(System.currentTimeMillis() - start);
+
+            start = System.currentTimeMillis();
+            for (int i = 0; i < times; i++) {
+                for (Integer x : list) {
+                    int a = x * x;
+                }
+            }
+            System.out.println(System.currentTimeMillis() - start);
+
+            System.out.println("-----------------------------");
+        }
+    }
 }
