@@ -2,6 +2,7 @@ package com.gpengtao.java;
 
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.junit.Test;
 
 import java.util.Comparator;
@@ -112,4 +113,24 @@ public class StreamTest {
             System.out.println("-----------------------------");
         }
     }
+
+    @Test
+    public void test_map_compute() {
+        Map<String, List<Integer>> map = Maps.newHashMap();
+
+        for (int i = 0; i < 10; i++) {
+            map.compute("a", (key, value) -> {
+                if (value == null) {
+                    value = Lists.newArrayList(100);
+                } else {
+                    value.add(100);
+                }
+                return value;
+            });
+
+            System.out.println(map);
+        }
+
+    }
+
 }
