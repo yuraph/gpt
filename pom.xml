@@ -26,6 +26,7 @@
         <module>security-test</module>
         <module>other</module>
         <module>es-test</module>
+        <module>some-test</module>
     </modules>
 
     <name>gpt</name>
