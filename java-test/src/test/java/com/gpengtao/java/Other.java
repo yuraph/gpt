@@ -3,7 +3,6 @@ package com.gpengtao.java;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +45,17 @@ public class Other {
         Integer integer2 = new Integer("1234567");
 
         System.out.println(integer1 == integer2);
+    }
+
+    @Test
+    public void test_integer_compare() {
+        Integer integer1 = new Integer("1234567");
+        int integer2 = 123456;
+
+        System.out.println(integer1 > integer2);
+
+        System.out.println(integer1.compareTo(integer2));
+
     }
 
     @Test
