@@ -42,11 +42,10 @@ public class Other {
 
     @Test
     public void test_integer() {
+        Integer integer1 = new Integer("1234567");
+        Integer integer2 = new Integer("1234567");
 
-    }
-
-    public static void main(String[] args) throws IOException {
-        System.in.read();
+        System.out.println(integer1 == integer2);
     }
 
     @Test
@@ -73,4 +72,5 @@ public class Other {
 
         System.out.println(list);
     }
+
 }

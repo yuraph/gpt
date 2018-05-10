@@ -19,7 +19,7 @@ public class JxlsMainTest {
     public static void main(String[] args) throws Exception {
 
         List<Employee> employees = Lists.newArrayList();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 20; i++) {
             employees.add(ModelGenerateUtil.generateModel(Employee.class));
         }
 
@@ -29,7 +29,8 @@ public class JxlsMainTest {
         Context context = new Context();
         context.putVar("employees", employees);
 
-        JxlsHelper.getInstance().processTemplate(is, os, context);
+        JxlsHelper helper = JxlsHelper.getInstance();
+        helper.processTemplate(is, os, context);
     }
 
 }
