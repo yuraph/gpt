@@ -15,6 +15,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.gpengtao</groupId>
+            <artifactId>utils</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.10</version>

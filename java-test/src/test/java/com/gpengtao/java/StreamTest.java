@@ -3,6 +3,8 @@ package com.gpengtao.java;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.gpengtao.java.model.Person;
+import com.gpengtao.utils.ModelGenerateUtil;
 import org.junit.Test;
 
 import java.util.Comparator;
@@ -10,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -21,12 +22,7 @@ public class StreamTest {
     public void test() {
         List<Integer> list = Lists.newArrayList(1, 2, 3, 4);
 
-        List<Integer> list2 = list.stream().filter(new Predicate<Integer>() {
-            @Override
-            public boolean test(Integer integer) {
-                return integer > 2;
-            }
-        }).collect(Collectors.toList());
+        List<Integer> list2 = list.stream().filter(integer -> integer > 2).collect(Collectors.toList());
 
         System.out.println(list);
         System.out.println(list2);
@@ -130,7 +126,18 @@ public class StreamTest {
 
             System.out.println(map);
         }
+    }
 
+    @Test
+    public void test_group() throws Exception {
+        List<Person> persons = Lists.newArrayList();
+        for (int i = 0; i < 10; i++) {
+            persons.add(ModelGenerateUtil.generateModel(Person.class));
+        }
+
+        Map<String, Map<Integer, List<Person>>> group = persons.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.groupingBy(Person::getAge)));
+
+        System.out.println(group);
     }
 
 }
