@@ -1,5 +1,6 @@
 package com.gpengtao.some.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -8,8 +9,10 @@ import java.util.Date;
 public class Employee {
     private String name;
     private Date birthDate;
-    private int payment;
+    private BigDecimal payment;
     private int bonus;
+
+    private Address address;
 
     public String getName() {
         return name;
@@ -27,11 +30,11 @@ public class Employee {
         this.birthDate = birthDate;
     }
 
-    public int getPayment() {
+    public BigDecimal getPayment() {
         return payment;
     }
 
-    public void setPayment(int payment) {
+    public void setPayment(BigDecimal payment) {
         this.payment = payment;
     }
 
@@ -41,5 +44,13 @@ public class Employee {
 
     public void setBonus(int bonus) {
         this.bonus = bonus;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 }
