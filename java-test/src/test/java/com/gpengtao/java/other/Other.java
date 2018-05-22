@@ -1,4 +1,4 @@
-package com.gpengtao.java;
+package com.gpengtao.java.other;
 
 import com.google.common.collect.Lists;
 import com.gpengtao.java.model.Person;

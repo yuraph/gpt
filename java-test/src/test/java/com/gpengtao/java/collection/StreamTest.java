@@ -1,4 +1,4 @@
-package com.gpengtao.java;
+package com.gpengtao.java.collection;
 
 
 import com.google.common.collect.Lists;

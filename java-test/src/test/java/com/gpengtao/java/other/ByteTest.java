@@ -1,4 +1,4 @@
-package com.gpengtao.java;
+package com.gpengtao.java.other;
 
 import org.junit.Assert;
 import org.junit.Test;

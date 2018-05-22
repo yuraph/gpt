@@ -1,7 +1,5 @@
 package com.gpengtao.java.other;
 
-import java.util.Arrays;
-
 /**
  * Created by pengtao.geng on 2016/11/2.
  */
