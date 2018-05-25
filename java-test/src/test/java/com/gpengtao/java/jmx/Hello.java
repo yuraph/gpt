@@ -1,9 +1,10 @@
-package com.gpengtao.test.mbean;
+package com.gpengtao.java.jmx;
 
 /**
  * Created by pengtao.geng on 2016/4/21.
  */
 public class Hello implements HelloMBean {
+
     private int count = 0;
 
     public void sayHello() {
@@ -23,6 +24,5 @@ public class Hello implements HelloMBean {
     }
 
     public void getNoting() {
-
     }
 }
