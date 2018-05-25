@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * JMX（Java Management Extensions，即Java管理扩展）是一个为应用程序、设备、系统等植入管理功能的框架。
+ * <p>
  * Created by pengtao.geng on 2016/4/21.
  */
 public class JmxTest {
