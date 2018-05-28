@@ -37,7 +37,7 @@ public class ClassLoaderTest {
             }
         };
 
-        // 会被默认的类加载器加载
+        // MyClass会被默认的类加载器加载
         String className = MyClass.class.getName();
 
         // 用自己写的类加载加载,并new一个对象
