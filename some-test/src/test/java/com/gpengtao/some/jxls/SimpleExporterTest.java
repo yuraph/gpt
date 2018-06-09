@@ -1,8 +1,8 @@
 package com.gpengtao.some.jxls;
 
 import com.google.common.collect.Lists;
-import com.gpengtao.some.model.Address;
-import com.gpengtao.some.model.Employee;
+import com.gpengtao.some.jxls.model.Address;
+import com.gpengtao.some.jxls.model.Employee;
 import org.junit.Test;
 import org.jxls.template.SimpleExporter;
 
