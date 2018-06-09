@@ -31,7 +31,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table schema="" tableName="my_table" domainObjectName="MyModel"
+        <table schema="idss_ims_admin" tableName="city" domainObjectName=""
                enableCountByExample="false"
                enableUpdateByExample="false"
                enableDeleteByExample="false"
@@ -44,14 +44,106 @@
             <!--生成insert后的selectKey标签-->
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
 
-            <!--model名字映射替换-->
-            <columnOverride column="order_no" property="myOrderNo" />
+            <ignoreColumn column="FRED" />
+        </table>
 
-            <!--jdbc类型替换-->
-            <columnOverride column="content" jdbcType="VARCHAR" />
+        <table schema="idss_ims_admin" tableName="city_org_mapping" domainObjectName=""
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+            <!--是否使用数据库表的列名作为model的字段名字-->
+            <property name="useActualColumnNames" value="false"/>
+
+            <!--生成insert后的selectKey标签-->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
 
             <ignoreColumn column="FRED" />
         </table>
 
+        <table schema="idss_ims_admin" tableName="menu" domainObjectName=""
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+            <!--是否使用数据库表的列名作为model的字段名字-->
+            <property name="useActualColumnNames" value="false"/>
+
+            <!--生成insert后的selectKey标签-->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+
+            <ignoreColumn column="FRED" />
+        </table>
+
+
+        <table schema="idss_ims_admin" tableName="menu_attr" domainObjectName=""
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+            <!--是否使用数据库表的列名作为model的字段名字-->
+            <property name="useActualColumnNames" value="false"/>
+
+            <!--生成insert后的selectKey标签-->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+
+            <ignoreColumn column="FRED" />
+        </table>
+
+
+        <table schema="idss_ims_admin" tableName="organization" domainObjectName=""
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+            <!--是否使用数据库表的列名作为model的字段名字-->
+            <property name="useActualColumnNames" value="false"/>
+
+            <!--生成insert后的selectKey标签-->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+
+            <ignoreColumn column="FRED" />
+        </table>
+
+
+        <table schema="idss_ims_admin" tableName="shop" domainObjectName=""
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+            <!--是否使用数据库表的列名作为model的字段名字-->
+            <property name="useActualColumnNames" value="false"/>
+
+            <!--生成insert后的selectKey标签-->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+
+            <ignoreColumn column="FRED" />
+        </table>
+
+        <table schema="idss_ims_admin" tableName="sku" domainObjectName=""
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+
+            <!--是否使用数据库表的列名作为model的字段名字-->
+            <property name="useActualColumnNames" value="false"/>
+
+            <!--生成insert后的selectKey标签-->
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+
+            <ignoreColumn column="FRED" />
+        </table>
     </context>
 </generatorConfiguration>
