@@ -1,5 +1,7 @@
 package com.gpengtao.java.model;
 
+import java.util.Objects;
+
 /**
  * Created by pengtao.geng on 2017/11/2.
  */
@@ -13,6 +15,11 @@ public class Person {
 
     public Person(String name) {
         this.name = name;
+    }
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
     }
 
     public String getName() {
@@ -37,6 +44,21 @@ public class Person {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return age == person.age &&
+                Objects.equals(name, person.name) &&
+                Objects.equals(city, person.city);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(age);
     }
 
     @Override
