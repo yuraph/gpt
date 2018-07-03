@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2018 Wormpex.com. All Rights Reserved.
- */
 package com.gpengtao.some.http;
 
 import org.apache.http.client.config.RequestConfig;
