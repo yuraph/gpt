@@ -1,6 +1,3 @@
-/*
- * Copyright (c) 2018 Wormpex.com. All Rights Reserved.
- */
 package com.gpengtao.java.lang;
 
 import org.apache.commons.lang3.StringUtils;
