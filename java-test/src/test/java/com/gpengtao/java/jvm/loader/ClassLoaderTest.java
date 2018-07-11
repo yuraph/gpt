@@ -1,11 +1,13 @@
 package com.gpengtao.java.jvm.loader;
 
 import org.junit.Test;
+import sun.management.VMManagement;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ClassLoadingMXBean;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Field;
 
 /**
  * Created by gpengtao on 16/7/21.
@@ -78,27 +80,46 @@ public class ClassLoaderTest {
 		System.out.println(mxBean.getLoadedClassCount());
 	}
 
+	/**
+	 * "jvm中load的class数量"、"jvm运行中JIT花费的时间"，这两个值我们能通过MXBean得到。但是现在我们得不到"jvm中load的class花费的时间"。
+	 * <p>
+	 * 这个测试方法为了看看load class花费多少时间，我们是从MXBean的实现类里面先拿到VMManagement，然后从它的接口获得jvm中load的class花费的时间。
+	 * <p>
+	 * 明明这个时间已经有了，现在不明白为什么java没有把这个时间直接在MXBean里面暴露出来，而是只暴露了load的class数量。
+	 *
+	 * @throws ClassNotFoundException e
+	 * @throws IllegalAccessException e
+	 */
 	@Test
-	public void test_load_class_time() {
+	public void test_load_class_time() throws ClassNotFoundException, IllegalAccessException {
+		// mxBean，记录了class加载的数量
 		ClassLoadingMXBean mxBean = ManagementFactory.getClassLoadingMXBean();
 
-		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+		// ClassLoadingImpl是mxBean的真正实现类
+		Class<?> clazz = Class.forName("sun.management.ClassLoadingImpl");
+		Field[] fields = clazz.getDeclaredFields();
+		Field vmManagementField = fields[0];
+		vmManagementField.setAccessible(true);
+
+		// 得到了ClassLoadingImpl里面的字段"jvm"，有了它我们可以得到class load花费的时间
+		VMManagement vm = (VMManagement) fields[0].get(mxBean);
+
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount() + " time: " + vm.getClassLoadingTime());
 
 		TestLoadClass test = new TestLoadClass();
 
-		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount() + " time: " + vm.getClassLoadingTime());
 
-		test.load();    // 第一次load耗时会长
+		test.loadSomeClass();    // 第一次load耗时会长
 
-		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount() + " time: " + vm.getClassLoadingTime());
 
-		test.load();    // class已经load过，执行很快
+		test.loadSomeClass();    // class已经load过，执行很快
 
-		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount() + " time: " + vm.getClassLoadingTime());
 
-		test.load();    // class已经load过，执行很快
+		test.loadSomeClass();    // class已经load过，执行很快
 
-		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
-
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount() + " time: " + vm.getClassLoadingTime());
 	}
 }

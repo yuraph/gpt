@@ -9,7 +9,7 @@ import com.gpengtao.java.model.Person;
  */
 public class TestLoadClass {
 
-	public void load() {
+	public void loadSomeClass() {
 		long start = System.currentTimeMillis();
 
 		Class[] c1 = {
