@@ -75,14 +75,30 @@ public class ClassLoaderTest {
 	public void class_load_mbean() {
 		ClassLoadingMXBean mxBean = ManagementFactory.getClassLoadingMXBean();
 
-		mxBean.getLoadedClassCount();
+		System.out.println(mxBean.getLoadedClassCount());
 	}
 
 	@Test
 	public void test_load_class_time() {
+		ClassLoadingMXBean mxBean = ManagementFactory.getClassLoadingMXBean();
+
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+
 		TestLoadClass test = new TestLoadClass();
+
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+
 		test.load();    // 第一次load耗时会长
-		test.load();
-		test.load();
+
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+
+		test.load();    // class已经load过，执行很快
+
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+
+		test.load();    // class已经load过，执行很快
+
+		System.out.println("loaded class 数量:" + mxBean.getLoadedClassCount());
+
 	}
 }

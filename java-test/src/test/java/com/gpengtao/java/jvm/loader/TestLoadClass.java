@@ -13,8 +13,8 @@ public class TestLoadClass {
 		long start = System.currentTimeMillis();
 
 		Class[] c1 = {
-				String.class,
-				Integer.class,
+				String.class,   // java lang的
+				Integer.class,  // java lang的
 				Lists.class,
 				Person.class,
 				JmxTest.class,
