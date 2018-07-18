@@ -90,4 +90,16 @@ public class MapTest {
 
 		map.put(new Person("hello33333", 111111), "33333");
 	}
+
+	@Test
+	public void test_map_merge() {
+		Map<String, Integer> map = Maps.newHashMap();
+
+		map.merge("1", 111, (a, b) -> a + b);
+		System.out.println(map);
+
+		map.merge("1", 111, (a, b) -> a + b);
+		System.out.println(map);
+
+	}
 }

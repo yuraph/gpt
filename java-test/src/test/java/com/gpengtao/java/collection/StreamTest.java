@@ -4,6 +4,7 @@ package com.gpengtao.java.collection;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.gpengtao.java.model.Person;
+import com.gpengtao.java.model.PersonSum;
 import com.gpengtao.utils.ModelGenerateUtil;
 import org.junit.Test;
 
@@ -138,6 +139,28 @@ public class StreamTest {
 		Map<String, Map<Integer, List<Person>>> group = persons.stream().collect(Collectors.groupingBy(Person::getCity, Collectors.groupingBy(Person::getAge)));
 
 		System.out.println(group);
+	}
+
+	@Test
+	public void test_group_2() throws Exception {
+		List<Person> persons = Lists.newArrayList();
+		for (int i = 0; i < 10; i++) {
+			persons.add(ModelGenerateUtil.generateModel(Person.class));
+		}
+
+		// 先分组，再把list转化成一个
+		Map<String, PersonSum> collect = persons.stream()
+				.collect(Collectors.groupingBy(Person::getCity, Collectors.collectingAndThen(Collectors.toList(), personList -> {
+					Person person = personList.get(0);
+					int sumAge = personList.stream().mapToInt(Person::getAge).sum();
+
+					PersonSum personSum = new PersonSum();
+					personSum.setCity(person.getCity());
+					personSum.setAgeSum(sumAge);
+					return personSum;
+				})));
+
+		System.out.println(collect);
 	}
 
 	@Test
