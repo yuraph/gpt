@@ -174,4 +174,22 @@ public class StreamTest {
 		System.out.println(booleanMap.get(false));
 	}
 
+	@Test
+	public void test_exception() {
+		List<Integer> list = Lists.newArrayList(2, 3, 4, 5);
+
+		list.stream()
+				.map(num -> {
+					int a = process(num);
+
+					System.out.println(a);
+					return a;
+				})
+				.collect(Collectors.toList());
+	}
+
+	private int process(Integer num) {
+		throw new RuntimeException("");
+	}
+
 }
