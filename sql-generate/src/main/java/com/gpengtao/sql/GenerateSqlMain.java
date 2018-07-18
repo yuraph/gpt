@@ -26,7 +26,7 @@ public class GenerateSqlMain {
 
     public static void main(String[] args) throws SQLException, IOException {
 
-        String url = "jdbc:mysql://common1-w-mysql.dev.wormpex.com:33006/idss_ims_productplan?useUnicode=true&amp;characterEncoding=UTF-8";
+        String url = "jdbc:mysql://common1-w-mysql.dev..com:33006/idss_ims_productplan?useUnicode=true&amp;characterEncoding=UTF-8";
         String username = "dev";
         String password = "096667f9c7d0396d";
         String tableName = "*";
