@@ -33,14 +33,49 @@ public class TestBigDecimal {
 		BigDecimal v6 = new BigDecimal("1.00");
 		System.out.println(v5.equals(v6));
 
+	}
 
+	@Test
+	public void test_big_decimal() {
+		// 打印0.1000000000000000055511151231257827021181583404541015625
+		BigDecimal d1 = new BigDecimal(0.1);
+		System.out.println(d1);
+
+		// 打印0.299999999999999988897769753748434595763683319091796875
+		BigDecimal d2 = new BigDecimal(0.3);
+		System.out.println(d2);
+
+		Float f = 2.2f;
+		double d = (double) f;
+		System.out.println(d);
+		f = 2.25f;
+		d = (double) f;
+		System.out.println(d);
+	}
+
+	@Test
+	public void test1() {
+		System.out.println(new BigDecimal(0.3));
+		System.out.println(new BigDecimal("0.3"));
+
+		System.out.println(Double.doubleToLongBits(0.3));
 	}
 
 	@Test
 	public void test() {
-		System.out.println(new BigDecimal("11.999" ).setScale(0, BigDecimal.ROUND_DOWN));
+		System.out.println(new BigDecimal("11.999").setScale(0, BigDecimal.ROUND_DOWN));
 
-		System.out.println(new BigDecimal("11.111" ).setScale(0, BigDecimal.ROUND_CEILING));
+		System.out.println(new BigDecimal("11.111").setScale(0, BigDecimal.ROUND_CEILING));
 	}
 
+	@Test
+	public void test_int_max_value() {
+		long num = Integer.MAX_VALUE;
+//		num *= 2;
+		System.out.println(num);
+
+		long year = num / (10 * 10000) / 365;
+
+		System.out.println(year);
+	}
 }
