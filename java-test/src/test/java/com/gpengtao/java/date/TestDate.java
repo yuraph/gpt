@@ -52,4 +52,12 @@ public class TestDate {
 
 		System.out.println(date1.compareTo(date2));
 	}
+
+	@Test
+	public void test_parse_date() throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = format.parse("2018-07-23 24:01:01");
+
+		System.out.println(date);
+	}
 }
