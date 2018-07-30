@@ -99,7 +99,7 @@ public class GenerateSqlMain {
 
     private static void printModelFields(String table, List<ColumnDesc> columnDescList) {
         for (ColumnDesc columnDesc : columnDescList) {
-            String javaType = TypeMappings.findJaveType(columnDesc.getType());
+            String javaType = TypeMappings.findJavaType(columnDesc.getType());
             String propertyName = getJavaPropertyName(columnDesc.getField());
 
             String comment = "/**\n" +

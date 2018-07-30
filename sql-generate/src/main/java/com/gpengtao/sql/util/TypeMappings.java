@@ -5,7 +5,7 @@ package com.gpengtao.sql.util;
  */
 public class TypeMappings {
 
-    public static String findJaveType(String sqlType) {
+    public static String findJavaType(String sqlType) {
         if (sqlType.contains("bigint")) {
             return "long";
         }
